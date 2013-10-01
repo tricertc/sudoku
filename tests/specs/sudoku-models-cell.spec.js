@@ -41,6 +41,19 @@ describe('Sudoku.models.Cell', function () {
         expect(cell.relatedCellPositions.indexOf(34)).toBeGreaterThan(-1);
         expect(cell.relatedCellPositions.indexOf(35)).toBeGreaterThan(-1);
       });
+
+      it('recognizes cells in same column', function () {
+        var cell = new Sudoku.models.Cell(43);
+
+        expect(cell.relatedCellPositions.indexOf(7)).toBeGreaterThan(-1);
+        expect(cell.relatedCellPositions.indexOf(16)).toBeGreaterThan(-1);
+        expect(cell.relatedCellPositions.indexOf(25)).toBeGreaterThan(-1);
+        expect(cell.relatedCellPositions.indexOf(34)).toBeGreaterThan(-1);
+        expect(cell.relatedCellPositions.indexOf(52)).toBeGreaterThan(-1);
+        expect(cell.relatedCellPositions.indexOf(61)).toBeGreaterThan(-1);
+        expect(cell.relatedCellPositions.indexOf(70)).toBeGreaterThan(-1);
+        expect(cell.relatedCellPositions.indexOf(79)).toBeGreaterThan(-1);
+      });
     });
 
   });

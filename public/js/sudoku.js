@@ -54,17 +54,26 @@
 
     /**
      * Gets related cell positions based on same row, column and group
-     * @returns {Array}
      */
     function getRelatedCellPositions(id) {
       var relatedCellPositions = []
         , row = Math.floor(id / 9) * 9
-        , position;
+        , col = id % 9
+        , pos;
 
       // add rows
-      for (position = row; position < row + 9; position += 1) {
-        if (position !== this.id) {
-          relatedCellPositions.push(position);
+      for (pos = row; pos < (row + 9); pos += 1) {
+        if (pos !== id) {
+          relatedCellPositions.push(pos);
+        }
+      }
+
+      // add columns
+      for (pos = col; pos <= (col + 72); pos += 9) {
+        if (pos !== id) {
+          if (relatedCellPositions.indexOf(pos) === -1) {
+            relatedCellPositions.push(pos);
+          }
         }
       }
 
