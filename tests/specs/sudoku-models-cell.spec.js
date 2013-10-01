@@ -20,6 +20,26 @@ describe('Sudoku.models.Cell', function () {
       expect(cell.id).toBe(11);
     });
 
+    it('requires a position', function () {
+      var func = Sudoku.models.Cell;
+
+      expect(func.bind(null, null)).toThrow();
+    });
+
+    it('expects a position greater to or equal then 0', function () {
+      var func = Sudoku.models.Cell;
+
+      expect(func.bind(null, -1)).toThrow();
+      expect(func.bind(null, 0)).not.toThrow();
+    });
+
+    it('expects a position less than or equal to 80', function () {
+      var func = Sudoku.models.Cell;
+
+      expect(func.bind(null, 81)).toThrow();
+      expect(func.bind(null, 80)).not.toThrow();
+    });
+
     /**
      * relatedCells
      */

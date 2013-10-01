@@ -29,18 +29,13 @@
      * @param cell Sudoku.models.Cell
      * @param position number
      */
-    Board.prototype.addCell = function (cell, position) {
+    Board.prototype.addCell = function (cell) {
       // check type
-      if (!(cell === null || cell instanceof Sudoku.models.Cell)) {
-        throw new Error("object is not of type Sudoku.models.Cell");
+      if (!(cell instanceof Sudoku.models.Cell)) {
+        throw new Error('object is not of type Sudoku.models.Cell');
       }
 
-      // check bounds
-      if (typeof position !== 'number' || !(position >= 0 && position <= 80)) {
-        throw new Error("position must be between 0 and 80");
-      }
-
-      this.cells[position] = cell;
+      this.cells[cell.id] = cell;
     };
 
     return Board;
@@ -48,6 +43,16 @@
 
   Sudoku.models.Cell = (function () {
     function Cell(position) {
+      // position type check
+      if (typeof position !== 'number') {
+        throw new Error('invalid cell position');
+      }
+
+      // position bounds check
+      if (position < 0 || position > 80) {
+        throw new Error('cell position out of bounds');
+      }
+
       this.id = position;
       this.relatedCellPositions = getRelatedCellPositions(this.id);
     }

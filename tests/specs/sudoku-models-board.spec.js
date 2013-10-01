@@ -40,35 +40,22 @@ describe('Sudoku.models.Board', function () {
         func = board.addCell;
       });
 
-      it('only allows nulls and Cell objects', function () {
+      it('only allows Cell objects', function () {
         //noinspection JSPrimitiveTypeWrapperUsage
         var str = new String()
-          , cell = new Sudoku.models.Cell();
-
+          , cell = new Sudoku.models.Cell(8);
 
         expect(board.addCell).toBeDefined();
-        expect(func.bind(null, str, 0)).toThrow();      // String should throw
-        expect(func.bind(null, cell, 0)).not.toThrow(); // Cell should not throw
-        expect(func.bind(null, null, 0)).not.toThrow(); // null should not throw
-      });
-
-      it('only accepts numeric positions', function () {
-        expect(func.bind(null, null, 0)).not.toThrow();
-        expect(func.bind(null, null, 'string')).toThrow();
-      });
-
-      it('only accepts positions 0 through 80', function () {
-        expect(func.bind(null, null, 0)).not.toThrow();
-        expect(func.bind(null, null, 80)).not.toThrow();
-        expect(func.bind(null, null, -1)).toThrow();
-        expect(func.bind(null, null, 81)).toThrow();
+        expect(func.bind(null, str)).toThrow();      // String should throw
+        expect(func.bind(null, null)).toThrow();     // null should not throw
+        expect(func.bind(null, cell)).not.toThrow(); // Cell should not throw
       });
 
       it('updates cells array', function () {
-        var cell = new Sudoku.models.Cell();
+        var cell = new Sudoku.models.Cell(8);
         cell.foo = 'bar';
 
-        board.addCell(cell, 8);
+        board.addCell(cell);
 
         expect(board.cells).not.toBe(null);
         expect(board.cells[8]).not.toBe(null);
