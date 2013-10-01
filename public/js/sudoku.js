@@ -47,8 +47,28 @@
   })();
 
   Sudoku.models.Cell = (function () {
-    function Cell() {
+    function Cell(position) {
+      this.id = position;
+      this.relatedCellPositions = getRelatedCellPositions(this.id);
+    }
 
+    /**
+     * Gets related cell positions based on same row, column and group
+     * @returns {Array}
+     */
+    function getRelatedCellPositions(id) {
+      var relatedCellPositions = []
+        , row = Math.floor(id / 9) * 9
+        , position;
+
+      // add rows
+      for (position = row; position < row + 9; position += 1) {
+        if (position !== this.id) {
+          relatedCellPositions.push(position);
+        }
+      }
+
+      return relatedCellPositions;
     }
 
     return Cell;
