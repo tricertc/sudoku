@@ -9,8 +9,18 @@ module.exports = function (grunt) {
         }
       }
     },
-    jasmine: {},
-    jshint: {},
+    jasmine: {
+      src: 'public/js/*.js',
+      options: {
+        specs: 'tests/specs/*.spec.js'
+      }
+    },
+    jshint: {
+      files: ['public/js/*.js'],
+      options: {
+        jshintrc: '.jshintrc'
+      }
+    },
     open: {
       dev: {
         path: 'http://127.0.0.1:<%=connect.dev.options.port%>/index.html',
