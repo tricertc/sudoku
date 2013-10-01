@@ -34,7 +34,7 @@ describe('Sudoku.models.Cell', function () {
         expect(cell.relatedCellPositions.indexOf(37)).toBe(-1);
       });
 
-      it('contains cell in same row', function () {
+      it('contains cells in same row', function () {
         var cell = new Sudoku.models.Cell(31);
 
         expect(cell.relatedCellPositions.indexOf(27)).toBeGreaterThan(-1);
