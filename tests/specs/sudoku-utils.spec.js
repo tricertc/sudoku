@@ -9,10 +9,10 @@ describe('Sudoku.utils', function () {
    * Function: getRandomNumber()
    */
   describe('getRandomNumber', function () {
-    it('returns a random value within a range', function () {
+    it('returns a random value between 0 and 3', function () {
       var i
         , x
-        , min = 1
+        , min = 0
         , max = 3
         , failed = false;
 
@@ -26,6 +26,11 @@ describe('Sudoku.utils', function () {
 
       expect(failed).toBe(false);
     });
+  });
+
+  it('returns 0 for a random number between 0 and 0', function () {
+    var value = Sudoku.utils.getRandomNumber(0, 0);
+    expect(value).toBe(0);
   });
 
   describe('remove', function () {

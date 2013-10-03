@@ -59,7 +59,7 @@
 
       // get value from remaining available
       if (availableValues.length > 0) {
-        indexOf = Sudoku.utils.getRandomNumber(0, availableValues.length);
+        indexOf = Sudoku.utils.getRandomNumber(0, availableValues.length - 1);
         return availableValues[indexOf];
       }
 
@@ -182,9 +182,8 @@
       }
 
       generated = this.solveWithRandoms();
-
       if (!generated) {
-        throw new Error('generation failed');
+        throw new Error('Sudoku generation failed');
       }
     };
 
@@ -197,9 +196,18 @@
         return true; // completed successfully
       }
 
-      // value = Sudoku.helpers.getRandomizedValue(this.cells, cell);
+      value = Sudoku.helpers.getRandomizedCellValue(this.cells, cell);
+      while (value !== -1) {
+        cell.setValue(value);
 
+        if (this.solveWithRandoms()) {
+          return true;
+        }
 
+        value = Sudoku.helpers.getRandomizedCellValue(this.cells, cell);
+      }
+
+      cell.reset();
       return false;
     };
 
@@ -227,6 +235,10 @@
       this.relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(this.position);
     }
 
+    /**
+     * Sets value to a number between 1 and 9 inclusively
+     * @param value
+     */
     Cell.prototype.setValue = function (value) {
       if (typeof value === 'number' && value >= 1 && value <= 9) {
         this.value = Math.floor(value);
@@ -236,6 +248,9 @@
       }
     };
 
+    /**
+     * Resets cell state
+     */
     Cell.prototype.reset = function () {
       this.value = null;
       this.history = [];
