@@ -1,6 +1,5 @@
 (function (w) {
-  var Sudoku
-    , __bind = function(fn, me){return function(){ return fn.apply(me, arguments); }; };
+  var Sudoku;
 
   Sudoku = w.Sudoku = w.Sudoku || {};
   Sudoku.models = {};
@@ -14,31 +13,15 @@
      * @constructor
      */
     function Board() {
-      var numCells = 81
+      var self = this
         , i;
 
-      // bind methods to scope
-      this.addCell = __bind(this.addCell, this);
-
-      // initialize cells;
+      // initialize cells array with 81 Cell objects;
       this.cells = [];
-      for (i = 0; i < numCells; i += 1) {
-        this.cells.push(null);
+      for (i = 0; i < 81; i += 1) {
+        self.cells.push(new Sudoku.models.Cell(i));
       }
     }
-
-    /**
-     * Adds a Cell to cells array with type and bounds validation
-     * @param cell Sudoku.models.Cell
-     */
-    Board.prototype.addCell = function (cell) {
-      // check type
-      if (!(cell instanceof Sudoku.models.Cell)) {
-        throw new Error('object is not of type Sudoku.models.Cell');
-      }
-
-      this.cells[cell.id] = cell;
-    };
 
     return Board;
   })();
@@ -48,6 +31,8 @@
    */
   Sudoku.models.Cell = (function () {
     function Cell(position) {
+      var self = this;
+
       // position type check
       if (typeof position !== 'number') {
         throw new Error('invalid cell position');
@@ -58,8 +43,9 @@
         throw new Error('cell position out of bounds');
       }
 
-      this.id = position;
-      this.relatedCellPositions = getRelatedCellPositions(this.id);
+      self.id = position;
+      self.value = null;
+      self.relatedCellPositions = getRelatedCellPositions(self.id);
     }
 
     /**

@@ -32,35 +32,5 @@ describe('Sudoku.models.Board', function () {
         expect(board.cells.length).toBe(81);
       });
     });
-
-    describe('Board.prototype.addCell', function () {
-      var func;
-
-      beforeEach(function () {
-        func = board.addCell;
-      });
-
-      it('only allows Cell objects', function () {
-        //noinspection JSPrimitiveTypeWrapperUsage
-        var str = new String()
-          , cell = new Sudoku.models.Cell(8);
-
-        expect(board.addCell).toBeDefined();
-        expect(func.bind(null, str)).toThrow();      // String should throw
-        expect(func.bind(null, null)).toThrow();     // null should not throw
-        expect(func.bind(null, cell)).not.toThrow(); // Cell should not throw
-      });
-
-      it('updates cells array', function () {
-        var cell = new Sudoku.models.Cell(8);
-        cell.foo = 'bar';
-
-        board.addCell(cell);
-
-        expect(board.cells).not.toBe(null);
-        expect(board.cells[8]).not.toBe(null);
-        expect(board.cells[8].foo).toBe('bar');
-      });
-    });
   });
 });
