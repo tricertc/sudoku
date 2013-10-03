@@ -23,5 +23,27 @@ describe('Sudoku.helpers', function () {
       expect(relatedCellPositions).toEqual(expected);
     });
   });
+
+  describe('findFirstUnassignedPosition', function () {
+    it('finds the first cell with an unassigned value', function () {
+      var cell = new Sudoku.models.Cell(10)
+        , cells;
+
+      cell.setValue(3);
+      cells = [cell, cell, cell, new Sudoku.models.Cell(8)];
+
+      expect(Sudoku.helpers.findFirstUnassignedPosition(cells)).toBe(3);
+    });
+
+    it('returns -1 if all cells are assigned', function () {
+      var cell = new Sudoku.models.Cell(10)
+        , cells;
+
+      cell.setValue(3);
+      cells = [cell, cell, cell];
+
+      expect(Sudoku.helpers.findFirstUnassignedPosition(cells)).toBe(-1);
+    });
+  });
 });
 

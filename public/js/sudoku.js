@@ -9,7 +9,29 @@
    * @type {object}
    */
   Sudoku.helpers = {
-    // Returns related cell positions based on same row, column and group
+    /**
+     * Returns the position of the first unassigned cell.  -1 if all assigned.
+     * @param cells
+     * @returns {number}
+     */
+    findFirstUnassignedPosition: function (cells) {
+      var i
+        , cell;
+
+      for (i = 0; i < cells.length; i += 1) {
+        cell = cells[i];
+        if (cell.value === null) {
+          return i;
+        }
+      }
+
+      return -1;
+    },
+    /**
+     * Returns an array of related cell positions
+     * @param id
+     * @returns {Array}
+     */
     getRelatedCellPositions: function (id) {
       var relatedCellPositions = []
         , row = Math.floor(id / 9) * 9
@@ -56,7 +78,13 @@
    * @type {object}
    */
   Sudoku.utils = {
-    // binds scope
+    /**
+     * Binds scope
+     * @param fn
+     * @param me
+     * @returns {Function}
+     * @private
+     */
     __bind: function(fn, me) {
       return function() {
         return fn.apply(me, arguments);
@@ -83,6 +111,37 @@
       }
     }
 
+    /**
+     * Function: generate() - generates a proper sudoku puzzle
+     */
+    Board.prototype.generate = function () {
+      var generated
+        , cell
+        , i;
+
+      // reset all cells
+      for (i = 0; i < 81; i += 1) {
+        cell = this.cells[i];
+        cell.reset();
+      }
+
+      generated = this.solveWithRandoms();
+
+      if (!generated) {
+        throw new Error('generation failed');
+      }
+    };
+
+    Board.prototype.solveWithRandoms = function () {
+      var position = Sudoku.helpers.findFirstUnassignedPosition(this.cells);
+
+      if (position === -1) {
+        return true; // completed successfully
+      }
+
+      return false;
+    };
+
     return Board;
   })();
 
@@ -102,6 +161,7 @@
       }
 
       this.value = null;
+      this.history = [];
       this.position = position;
       this.relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(this.position);
     }
@@ -109,6 +169,7 @@
     Cell.prototype.setValue = function (value) {
       if (typeof value === 'number' && value >= 1 && value <= 9) {
         this.value = Math.floor(value);
+        this.history.push(this.value);
       } else {
         throw new Error("value must be a number between 1 and 9");
       }
@@ -116,6 +177,7 @@
 
     Cell.prototype.reset = function () {
       this.value = null;
+      this.history = [];
     };
 
 

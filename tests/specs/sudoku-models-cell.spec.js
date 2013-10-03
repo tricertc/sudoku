@@ -15,6 +15,12 @@ describe('Sudoku.models.Cell', function () {
     expect(cell.position).toBe(11);
   });
 
+  it('has a history array', function () {
+    var cell = new Sudoku.models.Cell(11);
+    expect(cell.history).toBeDefined();
+    expect(Array.isArray(cell.history)).toBe(true);
+  });
+
   it('requires a position', function () {
     var func = Sudoku.models.Cell;
 
@@ -36,7 +42,7 @@ describe('Sudoku.models.Cell', function () {
   });
 
   /**
-   * Array: relatedCells
+   * Array: relatedCells[]
    */
   describe('relatedCellPositions', function () {
     it('is an array', function () {
@@ -121,25 +127,42 @@ describe('Sudoku.models.Cell', function () {
       cell.setValue(2.5);
       expect(cell.value).toBe(2);
     });
+
+    it('adds value to history array', function () {
+      cell.setValue(8);
+      expect(cell.history).toEqual([8]);
+    });
   });
 
   /**
    * Function: reset()
    */
   describe('reset', function () {
+    var cell;
+
+    beforeEach(function () {
+      cell = new Sudoku.models.Cell(10);
+    });
+
     it('exists as a function', function () {
       expect(Sudoku.models.Cell.prototype.reset).toBeDefined();
       expect(typeof Sudoku.models.Cell.prototype.reset).toBe('function');
     });
 
     it('resets value', function () {
-      var cell = new Sudoku.models.Cell(10);
       cell.setValue(8);
 
       expect(cell.value).toBe(8);
       cell.reset();
 
       expect(cell.value).toBeNull();
+    });
+
+    it('resets history array', function () {
+      cell.setValue(8);
+      cell.reset();
+
+      expect(cell.history).toEqual([]);
     });
   });
 });
