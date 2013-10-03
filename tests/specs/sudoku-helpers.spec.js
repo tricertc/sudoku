@@ -6,12 +6,6 @@ describe('Sudoku.helpers', function () {
   });
 
   describe('getRelatedCellPositions', function () {
-    var func;
-
-    beforeEach(function () {
-      func = Sudoku.helpers.getRElatedCellPositions;
-    });
-
     it('returns all related cell positions', function () {
       var relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(53)
         , expected = [
