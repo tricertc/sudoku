@@ -41,7 +41,7 @@ describe('Sudoku.models.Cell', function () {
     });
 
     /**
-     * relatedCells
+     * Array: relatedCells
      */
     describe('relatedCellPositions', function () {
       it('is an array', function () {
@@ -94,5 +94,58 @@ describe('Sudoku.models.Cell', function () {
       });
     });
 
+    /**
+     * Function: setValue(value)
+     */
+    describe('setValue', function () {
+      var cell;
+
+      beforeEach(function () {
+        cell = new Sudoku.models.Cell(10);
+      });
+
+      it('exists as a function', function () {
+        expect(Sudoku.models.Cell.prototype.setValue).toBeDefined();
+        expect(typeof Sudoku.models.Cell.prototype.setValue).toBe('function');
+      });
+
+      it('sets the value', function () {
+        cell.setValue(9);
+        expect(cell.value).toBe(9);
+      });
+
+      it('throws an error if value is not an integer between 1 and 9', function () {
+        var func = cell.setValue;
+        expect(func.bind(null, 0)).toThrow();
+        expect(func.bind(null, 'x')).toThrow();
+        expect(func.bind(null, '1')).toThrow();
+        expect(func.bind(null, 10)).toThrow();
+      });
+
+      it('converts a decimal to an integer', function () {
+        cell.setValue(2.5);
+        expect(cell.value).toBe(2);
+      });
+    });
+
+    /**
+     * Function: reset()
+     */
+    describe('reset', function () {
+      it('exists as a function', function () {
+        expect(Sudoku.models.Cell.prototype.reset).toBeDefined();
+        expect(typeof Sudoku.models.Cell.prototype.reset).toBe('function');
+      });
+
+      it('resets value', function () {
+        var cell = new Sudoku.models.Cell(10);
+        cell.setValue(8);
+
+        expect(cell.value).toBe(8);
+        cell.reset();
+
+        expect(cell.value).toBeNull();
+      });
+    });
   });
 });

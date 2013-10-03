@@ -6,9 +6,10 @@
 
   /**
    * Namespace: Sudoku.helpers
-   * @type object
+   * @type {object}
    */
   Sudoku.helpers = {
+    // Returns related cell positions based on same row, column and group
     getRelatedCellPositions: function (id) {
       var relatedCellPositions = []
         , row = Math.floor(id / 9) * 9
@@ -51,6 +52,19 @@
   };
 
   /**
+   * Namespace: Sudoku.utils
+   * @type {object}
+   */
+  Sudoku.utils = {
+    // binds scope
+    __bind: function(fn, me) {
+      return function() {
+        return fn.apply(me, arguments);
+      };
+    }
+  };
+
+  /**
    * Class:  Sudoku.models.Board
    */
   Sudoku.models.Board = (function () {
@@ -59,13 +73,13 @@
      * @constructor
      */
     function Board() {
-      var self = this
-        , i;
+      var i;
 
       // initialize cells array with 81 Cell objects;
       this.cells = [];
       for (i = 0; i < 81; i += 1) {
-        self.cells.push(new Sudoku.models.Cell(i));
+        //noinspection JSUnresolvedVariable
+        this.cells.push(new Sudoku.models.Cell(i));
       }
     }
 
@@ -77,8 +91,6 @@
    */
   Sudoku.models.Cell = (function () {
     function Cell(position) {
-      var self = this;
-
       // position type check
       if (typeof position !== 'number') {
         throw new Error('invalid cell position');
@@ -89,10 +101,23 @@
         throw new Error('cell position out of bounds');
       }
 
-      self.id = position;
-      self.value = null;
-      self.relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(self.id);
+      this.id = position;
+      this.value = null;
+      this.relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(this.id);
     }
+
+    Cell.prototype.setValue = function (value) {
+      if (typeof value === 'number' && value >= 1 && value <= 9) {
+        this.value = Math.floor(value);
+      } else {
+        throw new Error("value must be a number between 1 and 9");
+      }
+    };
+
+    Cell.prototype.reset = function () {
+      this.value = null;
+    };
+
 
     return Cell;
   })();
