@@ -171,22 +171,29 @@
      * Function: generate() - generates a proper sudoku puzzle
      */
     Board.prototype.generate = function () {
-      var generated
-        , cell
-        , i;
+      var generated;
 
-      // reset all cells
-      for (i = 0; i < 81; i += 1) {
-        cell = this.cells[i];
-        cell.reset();
-      }
-
+      this.reset();
       generated = this.solveWithRandoms();
       if (!generated) {
         throw new Error('Sudoku generation failed');
       }
     };
 
+    /**
+     * Function: resetCells() - Resets all cells
+     */
+    Board.prototype.reset = function () {
+      // reset all cells
+      this.cells.forEach(function (cell) {
+        cell.reset();
+      });
+    };
+
+    /**
+     * Backtracking solution using random number selection
+     * @returns {boolean}
+     */
     Board.prototype.solveWithRandoms = function () {
       var position = Sudoku.helpers.findFirstUnassignedPosition(this.cells)
         , cell = this.cells[position]
@@ -218,6 +225,11 @@
    * Class: Sudoku.models.Cell
    */
   Sudoku.models.Cell = (function () {
+    /**
+     * Constructor
+     * @param position
+     * @constructor
+     */
     function Cell(position) {
       // position type check
       if (typeof position !== 'number') {

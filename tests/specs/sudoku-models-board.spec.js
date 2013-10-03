@@ -15,6 +15,10 @@ describe('Sudoku.models.Board', function () {
     expect(Sudoku.models.Board.prototype.generate).toBeDefined();
   });
 
+  it('has a reset function', function () {
+    expect(Sudoku.models.Board.prototype.reset).toBeDefined();
+  });
+
   /**
    * Array: cells[]
    */
@@ -40,6 +44,39 @@ describe('Sudoku.models.Board', function () {
       position = Sudoku.helpers.findFirstUnassignedPosition(board.cells);
 
       expect(position).toBe(-1);
+    });
+  });
+
+  /**
+   * Function: reset()
+   */
+  describe('reset', function () {
+    it('resets all cells', function () {
+      var i
+        , count;
+
+      board.cells.forEach(function (cell) {
+        cell.setValue(5);
+      });
+
+      count = 0;
+      for (i = 0; i < board.cells.length; i += 1) {
+        if (board.cells[i].value === 5) {
+          count += 1;
+        }
+      }
+
+      expect(count).toBe(81);
+
+      board.reset();
+      count = 0;
+      for (i = 0; i < board.cells.length; i += 1) {
+        if (board.cells[i].value !== null) {
+          count += 1;
+        }
+      }
+
+      expect(count).toBe(0);
     });
   });
 });
