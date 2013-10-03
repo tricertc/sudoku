@@ -5,6 +5,9 @@
   Sudoku = w.Sudoku = w.Sudoku || {};
   Sudoku.models = {};
 
+  /**
+   * Class:  Sudoku.models.Board
+   */
   Sudoku.models.Board = (function () {
     /**
      * Constructor initializes cells array
@@ -14,7 +17,7 @@
       var numCells = 81
         , i;
 
-      // bind methods to parent scope
+      // bind methods to scope
       this.addCell = __bind(this.addCell, this);
 
       // initialize cells;
@@ -27,7 +30,6 @@
     /**
      * Adds a Cell to cells array with type and bounds validation
      * @param cell Sudoku.models.Cell
-     * @param position number
      */
     Board.prototype.addCell = function (cell) {
       // check type
@@ -41,6 +43,9 @@
     return Board;
   })();
 
+  /**
+   * Class: Sudoku.models.Cell
+   */
   Sudoku.models.Cell = (function () {
     function Cell(position) {
       // position type check
