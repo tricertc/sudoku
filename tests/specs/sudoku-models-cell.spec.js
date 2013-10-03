@@ -92,18 +92,6 @@ describe('Sudoku.models.Cell', function () {
         expect(cell.relatedCellPositions.indexOf(76)).toBeGreaterThan(-1);
         expect(cell.relatedCellPositions.indexOf(77)).toBeGreaterThan(-1);
       });
-
-      it('is complete', function () {
-        var cell = new Sudoku.models.Cell(53);
-
-        var expected = [
-          45, 46, 47, 48, 49, 50, 51, 52,
-          8, 17, 26, 35, 44, 62, 71, 80,
-          33, 42, 34, 43
-        ];
-
-        expect(cell.relatedCellPositions).toEqual(expected);
-      });
     });
 
   });

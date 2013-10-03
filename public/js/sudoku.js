@@ -5,6 +5,52 @@
   Sudoku.models = {};
 
   /**
+   * Namespace: Sudoku.helpers
+   * @type object
+   */
+  Sudoku.helpers = {
+    getRelatedCellPositions: function (id) {
+      var relatedCellPositions = []
+        , row = Math.floor(id / 9) * 9
+        , col = id % 9
+        , root = (id - (id % 3)) - (Math.floor((id - (id % 3)) / 9) % 3) * 9
+        , pos
+        , x
+        , y;
+
+      // add rows
+      for (pos = row; pos < (row + 9); pos += 1) {
+        if (pos !== id) {
+          relatedCellPositions.push(pos);
+        }
+      }
+
+      // add columns
+      for (pos = col; pos <= (col + 72); pos += 9) {
+        if (pos !== id) {
+          if (relatedCellPositions.indexOf(pos) === -1) {
+            relatedCellPositions.push(pos);
+          }
+        }
+      }
+
+      // add group
+      for (x = root; x < root + 3; x+= 1) {
+        for (y = 0; y < 3; y +=1) {
+          pos = x + (y * 9);
+          if (pos !== id) {
+            if (relatedCellPositions.indexOf(pos) === -1) {
+              relatedCellPositions.push(pos);
+            }
+          }
+        }
+      }
+
+      return relatedCellPositions;
+    }
+  };
+
+  /**
    * Class:  Sudoku.models.Board
    */
   Sudoku.models.Board = (function () {
@@ -45,50 +91,7 @@
 
       self.id = position;
       self.value = null;
-      self.relatedCellPositions = getRelatedCellPositions(self.id);
-    }
-
-    /**
-     * Gets related cell positions based on same row, column and group
-     */
-    function getRelatedCellPositions(id) {
-      var relatedCellPositions = []
-        , row = Math.floor(id / 9) * 9
-        , col = id % 9
-        , root = (id - (id % 3)) - (Math.floor((id - (id % 3)) / 9) % 3) * 9
-        , pos
-        , x
-        , y;
-
-      // add rows
-      for (pos = row; pos < (row + 9); pos += 1) {
-        if (pos !== id) {
-          relatedCellPositions.push(pos);
-        }
-      }
-
-      // add columns
-      for (pos = col; pos <= (col + 72); pos += 9) {
-        if (pos !== id) {
-          if (relatedCellPositions.indexOf(pos) === -1) {
-            relatedCellPositions.push(pos);
-          }
-        }
-      }
-
-      // add group
-      for (x = root; x < root + 3; x+= 1) {
-        for (y = 0; y < 3; y +=1) {
-          pos = x + (y * 9);
-          if (pos !== id) {
-            if (relatedCellPositions.indexOf(pos) === -1) {
-              relatedCellPositions.push(pos);
-            }
-          }
-        }
-      }
-
-      return relatedCellPositions;
+      self.relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(self.id);
     }
 
     return Cell;
