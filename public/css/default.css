@@ -1,0 +1,26 @@
+#sudoku-table {
+    border: 2px solid #0d3349;
+    border-collapse: collapse;
+}
+
+#sudoku-table tr td {
+    background-color: #ECE9E9;
+    border: 1px dotted #0d3349;
+    height: 50px;
+    width: 50px;
+}
+
+#sudoku-table tr > td:nth-last-child(7),
+#sudoku-table tr > td:nth-last-child(4) {
+    border-right: 2px solid #0d3349;
+}
+
+#sudoku-table tr:nth-last-child(4) > td,
+#sudoku-table tr:nth-last-child(7) > td {
+    border-bottom: 2px solid #0d3349;
+}
+
+#sudoku-table tr > td {
+    color: #528CE0;
+    text-align: center;
+}
