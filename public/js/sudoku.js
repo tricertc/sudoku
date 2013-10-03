@@ -28,6 +28,44 @@
       return -1;
     },
     /**
+     * Returns a randomized, valid value or null if no value is found
+     * @param cells
+     * @param cell
+     */
+    getRandomizedCellValue: function (cells, targetCell) {
+      var availableValues = [1,2,3,4,5,6,7,8,9]
+        , i
+        , cell
+        , indexOf;
+
+      // check related cell positions
+      for (i = 0; i < targetCell.relatedCellPositions.length; i += 1) {
+        cell = cells[targetCell.relatedCellPositions[i]];
+        if (cell.value !== null) {
+          indexOf = availableValues.indexOf(cell.value);
+          if (indexOf >= 0) {
+            Sudoku.utils.remove(availableValues, indexOf);
+          }
+        }
+      }
+
+      // check cell history
+      for (i = 0; i < targetCell.history.length; i += 1) {
+        indexOf = availableValues.indexOf(targetCell.history[i]);
+        if (indexOf >= 0) {
+          Sudoku.utils.remove(availableValues, indexOf);
+        }
+      }
+
+      // get value from remaining available
+      if (availableValues.length > 0) {
+        indexOf = Sudoku.utils.getRandomNumber(0, availableValues.length);
+        return availableValues[indexOf];
+      }
+
+      return -1;
+    },
+    /**
      * Returns an array of related cell positions
      * @param id
      * @returns {Array}
@@ -89,6 +127,24 @@
       return function() {
         return fn.apply(me, arguments);
       };
+    },
+    /**
+     * Generates a random number inclusively within range
+     *   - http://stackoverflow.com/a/3594189
+     * @param min
+     * @param max
+     * @returns {number|string}
+     */
+    getRandomNumber: function (min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    /**
+     * Removes element from array in given position
+     * @param array
+     * @param position
+     */
+    remove: function (array, position) {
+      array.splice(position, 1);
     }
   };
 
@@ -133,11 +189,16 @@
     };
 
     Board.prototype.solveWithRandoms = function () {
-      var position = Sudoku.helpers.findFirstUnassignedPosition(this.cells);
+      var position = Sudoku.helpers.findFirstUnassignedPosition(this.cells)
+        , cell = this.cells[position]
+        , value;
 
       if (position === -1) {
         return true; // completed successfully
       }
+
+      // value = Sudoku.helpers.getRandomizedValue(this.cells, cell);
+
 
       return false;
     };
