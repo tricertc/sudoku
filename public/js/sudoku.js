@@ -101,9 +101,9 @@
         throw new Error('cell position out of bounds');
       }
 
-      this.id = position;
       this.value = null;
-      this.relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(this.id);
+      this.position = position;
+      this.relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(this.position);
     }
 
     Cell.prototype.setValue = function (value) {

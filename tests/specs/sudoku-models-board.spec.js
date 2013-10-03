@@ -20,7 +20,7 @@ describe('Sudoku.models.Board', function () {
     });
 
     /**
-     * cells array
+     * Array: cells
      */
     describe('board.cells', function () {
       it('is an array', function () {
