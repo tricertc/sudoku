@@ -30,7 +30,7 @@
     /**
      * Returns a randomized, valid value or null if no value is found
      * @param cells
-     * @param cell
+     * @param targetCell
      */
     getRandomizedCellValue: function (cells, targetCell) {
       var availableValues = [1,2,3,4,5,6,7,8,9]
@@ -245,7 +245,7 @@
       this.value = null;
       this.history = [];
       this.position = position;
-      this.relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(this.position);
+      this.relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(position);
     }
 
     /**
