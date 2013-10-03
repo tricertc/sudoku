@@ -196,22 +196,23 @@
      */
     Board.prototype.solveWithRandoms = function () {
       var position = Sudoku.helpers.findFirstUnassignedPosition(this.cells)
-        , cell = this.cells[position]
-        , value;
+        , cell
+        , randomizedValue;
 
       if (position === -1) {
         return true; // completed successfully
       }
 
-      value = Sudoku.helpers.getRandomizedCellValue(this.cells, cell);
-      while (value !== -1) {
-        cell.setValue(value);
+      cell = this.cells[position];
+      randomizedValue = Sudoku.helpers.getRandomizedCellValue(this.cells, cell);
+      while (randomizedValue !== -1) {
+        cell.setValue(randomizedValue);
 
         if (this.solveWithRandoms()) {
           return true;
         }
 
-        value = Sudoku.helpers.getRandomizedCellValue(this.cells, cell);
+        randomizedValue = Sudoku.helpers.getRandomizedCellValue(this.cells, cell);
       }
 
       cell.reset();
