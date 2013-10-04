@@ -15,10 +15,18 @@ describe('Sudoku.models.Cell', function () {
     expect(cell.position).toBe(11);
   });
 
+  it('has a draw method', function () {
+    expect(Sudoku.models.Cell.prototype.draw).toBeDefined();
+  });
+
   it('has a history array', function () {
     var cell = new Sudoku.models.Cell(11);
     expect(cell.history).toBeDefined();
     expect(Array.isArray(cell.history)).toBe(true);
+  });
+
+  it('has a registerDrawCellCallback method', function () {
+    expect(Sudoku.models.Cell.prototype.registerDrawCellCallback).toBeDefined();
   });
 
   it('requires a position', function () {

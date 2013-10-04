@@ -4,11 +4,18 @@ describe('Sudoku.models.Board', function () {
 
   beforeEach(function () {
     Sudoku = window.Sudoku;
-    board = new Sudoku.models.Board();
+    board = new Sudoku.models.Board({
+      drawBoardCallback: function () {},
+      drawCellCallback: function () {}
+    });
   });
 
   it('is a function', function () {
     expect(typeof Sudoku.models.Board).toBe('function');
+  });
+
+  it('has a draw function', function () {
+    expect(Sudoku.models.Board.prototype.draw).toBeDefined();
   });
 
   it('has a generate function', function () {
@@ -17,6 +24,26 @@ describe('Sudoku.models.Board', function () {
 
   it('has a reset function', function () {
     expect(Sudoku.models.Board.prototype.reset).toBeDefined();
+  });
+
+  it('has a drawBoardCallback', function () {
+    expect(board.drawBoardCallback).toBeDefined();
+  });
+
+  it('has a drawCellCallback', function () {
+    expect(board.drawCellCallback).toBeDefined();
+  });
+
+  it('executes drawBoardCallback when instantiated', function () {
+    var executed = false;
+
+    board = new Sudoku.models.Board({
+      drawBoardCallback: function () {
+        executed = true;
+      }
+    });
+
+    expect(executed).toBe(true);
   });
 
   /**
@@ -77,6 +104,29 @@ describe('Sudoku.models.Board', function () {
       }
 
       expect(count).toBe(0);
+    });
+  });
+
+  /**
+   * Function: draw()
+   */
+  describe('draw', function () {
+    it('passes a reference of the board instance to the callback', function () {
+      var context = null;
+
+      board = new Sudoku.models.Board({
+        drawBoardCallback: function (e) {
+          context = e;
+        }
+      });
+
+      expect(context instanceof Sudoku.models.Board).toBe(true);
+      expect(board.foo).toBeUndefined();
+
+      board.foo = 'bar';
+      board.draw(); // should reset context with updated board instance
+
+      expect(context.foo).toBe('bar');
     });
   });
 });

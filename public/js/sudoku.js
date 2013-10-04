@@ -156,16 +156,37 @@
      * Constructor initializes cells array
      * @constructor
      */
-    function Board() {
-      var i;
+    function Board(config) {
+      var i
+        , cell
+        , _config = config || {};
+
+      this.drawBoardCallback = _config.drawBoardCallback;
+      this.drawCellCallback = _config.drawCellCallback;
 
       // initialize cells array with 81 Cell objects;
       this.cells = [];
       for (i = 0; i < 81; i += 1) {
+        cell = new Sudoku.models.Cell(i);
         //noinspection JSUnresolvedVariable
-        this.cells.push(new Sudoku.models.Cell(i));
+        cell.registerDrawCellCallback(this.drawCellCallback);
+
+        //noinspection JSUnresolvedVariable
+        this.cells.push(cell);
       }
+
+      //noinspection JSUnresolvedFunction
+      this.draw();
     }
+
+    /**
+     * Function: draw() - executes drawBoardCallback if defined
+     */
+    Board.prototype.draw = function () {
+      if (typeof this.drawBoardCallback === 'function') {
+        this.drawBoardCallback(this);
+      }
+    };
 
     /**
      * Function: generate() - generates a proper sudoku puzzle
@@ -249,6 +270,31 @@
     }
 
     /**
+     * Function: draw() - executes draw cell callback if defined
+     */
+    Cell.prototype.draw = function () {
+      if (typeof this.drawCellCallback === 'function') {
+        this.drawCellCallback(this);
+      }
+    };
+
+    /**
+     * Function: registerDrawCellCallback() - sets callback function to draw cell
+     * @param func
+     */
+    Cell.prototype.registerDrawCellCallback = function (func) {
+      this.drawCellCallback = func;
+    };
+
+    /**
+     * Resets cell state
+     */
+    Cell.prototype.reset = function () {
+      this.value = null;
+      this.history = [];
+    };
+
+    /**
      * Sets value to a number between 1 and 9 inclusively
      * @param value
      */
@@ -260,15 +306,6 @@
         throw new Error("value must be a number between 1 and 9");
       }
     };
-
-    /**
-     * Resets cell state
-     */
-    Cell.prototype.reset = function () {
-      this.value = null;
-      this.history = [];
-    };
-
 
     return Cell;
   })();
