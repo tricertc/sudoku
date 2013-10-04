@@ -292,6 +292,7 @@
     Cell.prototype.reset = function () {
       this.value = null;
       this.history = [];
+      this.draw();
     };
 
     /**
@@ -302,6 +303,7 @@
       if (typeof value === 'number' && value >= 1 && value <= 9) {
         this.value = Math.floor(value);
         this.history.push(this.value);
+        this.draw();
       } else {
         throw new Error("value must be a number between 1 and 9");
       }

@@ -140,6 +140,14 @@ describe('Sudoku.models.Cell', function () {
       cell.setValue(8);
       expect(cell.history).toEqual([8]);
     });
+
+    it('adds one value per call to history array', function () {
+      cell.setValue(1);
+      cell.setValue(2);
+      cell.setValue(3);
+
+      expect(cell.history).toEqual([ 1, 2, 3]);
+    });
   });
 
   /**
@@ -171,6 +179,59 @@ describe('Sudoku.models.Cell', function () {
       cell.reset();
 
       expect(cell.history).toEqual([]);
+    });
+  });
+
+  /**
+   * Function: draw()
+   */
+  describe('draw', function () {
+    var board
+      , context
+      , called;
+
+    beforeEach(function () {
+      context = null;
+      called = false;
+
+      board = new Sudoku.models.Board({
+        drawCellCallback: function (e) {
+          context = e;
+          called = true;
+        }
+      })
+    });
+
+    it('is not triggered when cell is instantiated', function () {
+      expect(called).toBe(false);
+    });
+
+    it('is called when value is updated', function () {
+      var cell = board.cells[0];
+      cell.setValue(1);
+
+      expect(called).toBe(true);
+    });
+
+    it('is called when a cell is reset', function () {
+      var cell = board.cells[0];
+      cell.reset();
+
+      expect(called).toBe(true);
+    });
+
+    it('passes a reference of the cell to the callback', function () {
+      var cell = board.cells[0];
+      cell.setValue(1);
+
+      expect(called).toBe(true);
+      expect(context instanceof Sudoku.models.Cell).toBe(true);
+      expect(context.foo).toBeUndefined();
+
+      cell.foo = 'bar';
+      cell.setValue(2);
+
+      expect(context.foo).toBe('bar');
     });
   });
 });
