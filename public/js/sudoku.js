@@ -273,8 +273,8 @@
      * Function: draw() - executes draw cell callback if defined
      */
     Cell.prototype.update = function () {
-      if (typeof this.onCellUpdateCallback === 'function') {
-        this.onCellUpdateCallback(this);
+      if (typeof this.onUpdateCallback === 'function') {
+        this.onUpdateCallback(this);
       }
     };
 
@@ -283,7 +283,7 @@
      * @param func
      */
     Cell.prototype.registerUpdateCallback = function (func) {
-      this.onCellUpdateCallback = func;
+      this.onUpdateCallback = func;
     };
 
     /**
