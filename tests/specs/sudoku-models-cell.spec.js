@@ -15,8 +15,8 @@ describe('Sudoku.models.Cell', function () {
     expect(cell.position).toBe(11);
   });
 
-  it('has a draw method', function () {
-    expect(Sudoku.models.Cell.prototype.draw).toBeDefined();
+  it('has a update method', function () {
+    expect(Sudoku.models.Cell.prototype.update).toBeDefined();
   });
 
   it('has a history array', function () {
@@ -25,8 +25,8 @@ describe('Sudoku.models.Cell', function () {
     expect(Array.isArray(cell.history)).toBe(true);
   });
 
-  it('has a registerDrawCellCallback method', function () {
-    expect(Sudoku.models.Cell.prototype.registerDrawCellCallback).toBeDefined();
+  it('has a registerUpdateCallback method', function () {
+    expect(Sudoku.models.Cell.prototype.registerUpdateCallback).toBeDefined();
   });
 
   it('requires a position', function () {
@@ -183,9 +183,9 @@ describe('Sudoku.models.Cell', function () {
   });
 
   /**
-   * Function: draw()
+   * Function: update()
    */
-  describe('draw', function () {
+  describe('update', function () {
     var board
       , context
       , called;
@@ -195,7 +195,7 @@ describe('Sudoku.models.Cell', function () {
       called = false;
 
       board = new Sudoku.models.Board({
-        drawCellCallback: function (e) {
+        onCellUpdateCallback: function (e) {
           context = e;
           called = true;
         }

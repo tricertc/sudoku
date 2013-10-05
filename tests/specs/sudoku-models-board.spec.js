@@ -5,8 +5,8 @@ describe('Sudoku.models.Board', function () {
   beforeEach(function () {
     Sudoku = window.Sudoku;
     board = new Sudoku.models.Board({
-      drawBoardCallback: function () {},
-      drawCellCallback: function () {}
+      onInitCallback: function () {},
+      onCellUpdateCallback: function () {}
     });
   });
 
@@ -14,8 +14,8 @@ describe('Sudoku.models.Board', function () {
     expect(typeof Sudoku.models.Board).toBe('function');
   });
 
-  it('has a draw function', function () {
-    expect(Sudoku.models.Board.prototype.draw).toBeDefined();
+  it('has a __initCallback function', function () {
+    expect(Sudoku.models.Board.prototype.__initCallback).toBeDefined();
   });
 
   it('has a generate function', function () {
@@ -26,19 +26,19 @@ describe('Sudoku.models.Board', function () {
     expect(Sudoku.models.Board.prototype.reset).toBeDefined();
   });
 
-  it('has a drawBoardCallback', function () {
-    expect(board.drawBoardCallback).toBeDefined();
+  it('has a onInitCallback property', function () {
+    expect(board.onInitCallback).toBeDefined();
   });
 
-  it('has a drawCellCallback', function () {
-    expect(board.drawCellCallback).toBeDefined();
+  it('has a onCellUpdateCallback', function () {
+    expect(board.onCellUpdateCallback).toBeDefined();
   });
 
-  it('executes drawBoardCallback when instantiated', function () {
+  it('executes onInitCallback when instantiated', function () {
     var executed = false;
 
     board = new Sudoku.models.Board({
-      drawBoardCallback: function () {
+      onInitCallback: function () {
         executed = true;
       }
     });
@@ -108,14 +108,14 @@ describe('Sudoku.models.Board', function () {
   });
 
   /**
-   * Function: draw()
+   * Function: __initCallback()
    */
-  describe('draw', function () {
+  describe('__initCallback', function () {
     it('passes a reference of the board instance to the callback', function () {
       var context = null;
 
       board = new Sudoku.models.Board({
-        drawBoardCallback: function (e) {
+        onInitCallback: function (e) {
           context = e;
         }
       });
@@ -124,7 +124,7 @@ describe('Sudoku.models.Board', function () {
       expect(board.foo).toBeUndefined();
 
       board.foo = 'bar';
-      board.draw(); // should reset context with updated board instance
+      board.__initCallback(); // should reset context with updated board instance
 
       expect(context.foo).toBe('bar');
     });

@@ -161,30 +161,30 @@
         , cell
         , _config = config || {};
 
-      this.drawBoardCallback = _config.drawBoardCallback;
-      this.drawCellCallback = _config.drawCellCallback;
+      this.onInitCallback = _config.onInitCallback;
+      this.onCellUpdateCallback = _config.onCellUpdateCallback;
 
       // initialize cells array with 81 Cell objects;
       this.cells = [];
       for (i = 0; i < 81; i += 1) {
         cell = new Sudoku.models.Cell(i);
         //noinspection JSUnresolvedVariable
-        cell.registerDrawCellCallback(this.drawCellCallback);
+        cell.registerUpdateCallback(this.onCellUpdateCallback);
 
         //noinspection JSUnresolvedVariable
         this.cells.push(cell);
       }
 
       //noinspection JSUnresolvedFunction
-      this.draw();
+      this.__initCallback();
     }
 
     /**
      * Function: draw() - executes drawBoardCallback if defined
      */
-    Board.prototype.draw = function () {
-      if (typeof this.drawBoardCallback === 'function') {
-        this.drawBoardCallback(this);
+    Board.prototype.__initCallback = function () {
+      if (typeof this.onInitCallback === 'function') {
+        this.onInitCallback(this);
       }
     };
 
@@ -272,9 +272,9 @@
     /**
      * Function: draw() - executes draw cell callback if defined
      */
-    Cell.prototype.draw = function () {
-      if (typeof this.drawCellCallback === 'function') {
-        this.drawCellCallback(this);
+    Cell.prototype.update = function () {
+      if (typeof this.onCellUpdateCallback === 'function') {
+        this.onCellUpdateCallback(this);
       }
     };
 
@@ -282,8 +282,8 @@
      * Function: registerDrawCellCallback() - sets callback function to draw cell
      * @param func
      */
-    Cell.prototype.registerDrawCellCallback = function (func) {
-      this.drawCellCallback = func;
+    Cell.prototype.registerUpdateCallback = function (func) {
+      this.onCellUpdateCallback = func;
     };
 
     /**
@@ -292,7 +292,7 @@
     Cell.prototype.reset = function () {
       this.value = null;
       this.history = [];
-      this.draw();
+      this.update();
     };
 
     /**
@@ -303,7 +303,7 @@
       if (typeof value === 'number' && value >= 1 && value <= 9) {
         this.value = Math.floor(value);
         this.history.push(this.value);
-        this.draw();
+        this.update();
       } else {
         throw new Error("value must be a number between 1 and 9");
       }
