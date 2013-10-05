@@ -5,118 +5,38 @@
         <link rel="stylesheet" href="css/default.css"/>
     </head>
     <body>
-        <table id="sudoku-table">
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
         <script src="js/sudoku.js"></script>
         <script>
-          (function () {
-            var board = new Sudoku.models.Board()
-              , elements = document.getElementById('sudoku-table').getElementsByTagName('td');
+            (function () {
+                var board = new Sudoku.models.Board({
+                    onInitCallback: function (board) {
+                        var body = document.getElementsByTagName('body')[0],
+                            table = document.createElement('table'),
+                            tr,
+                            td,
+                            i,
+                            j;
 
-            board.generate();
-            board.cells.forEach(function (cell) {
-              elements[cell.position].innerHTML = cell.value;
-            });
-          }());
+                        table.id = 'sudoku-table';
+                        for (i = 0; i < 9; i += 1) {
+                            tr = document.createElement('tr');
+                            for (j = 0; j < 9; j += 1) {
+                                td = document.createElement('td');
+                                td.id = 'sudoku-cell-' + ((i * 9) + j).toString();
+                                tr.appendChild(td);
+                            }
+                            table.appendChild(tr);
+                        }
+                        body.appendChild(table);
+                    },
+                    onCellUpdateCallback: function (cell) {
+                        var td = document.getElementById('sudoku-cell-' + cell.position.toString());
+                        td.innerHTML = cell.value || '';
+                    }
+                });
+
+                board.generate();
+            }());
         </script>
     </body>
 </html>
