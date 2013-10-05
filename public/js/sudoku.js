@@ -30,7 +30,7 @@
     /**
      * Returns a randomized, valid value or null if no value is found
      * @param cells
-     * @param cell
+     * @param targetCell
      */
     getRandomizedCellValue: function (cells, targetCell) {
       var availableValues = [1,2,3,4,5,6,7,8,9]
@@ -156,16 +156,37 @@
      * Constructor initializes cells array
      * @constructor
      */
-    function Board() {
-      var i;
+    function Board(config) {
+      var i
+        , cell
+        , _config = config || {};
+
+      this.onInitCallback = _config.onInitCallback;
+      this.onCellUpdateCallback = _config.onCellUpdateCallback;
 
       // initialize cells array with 81 Cell objects;
       this.cells = [];
       for (i = 0; i < 81; i += 1) {
+        cell = new Sudoku.models.Cell(i);
         //noinspection JSUnresolvedVariable
-        this.cells.push(new Sudoku.models.Cell(i));
+        cell.registerUpdateCallback(this.onCellUpdateCallback);
+
+        //noinspection JSUnresolvedVariable
+        this.cells.push(cell);
       }
+
+      //noinspection JSUnresolvedFunction
+      this.__initCallback();
     }
+
+    /**
+     * Function: draw() - executes drawBoardCallback if defined
+     */
+    Board.prototype.__initCallback = function () {
+      if (typeof this.onInitCallback === 'function') {
+        this.onInitCallback(this);
+      }
+    };
 
     /**
      * Function: generate() - generates a proper sudoku puzzle
@@ -245,8 +266,34 @@
       this.value = null;
       this.history = [];
       this.position = position;
-      this.relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(this.position);
+      this.relatedCellPositions = Sudoku.helpers.getRelatedCellPositions(position);
     }
+
+    /**
+     * Function: draw() - executes draw cell callback if defined
+     */
+    Cell.prototype.update = function () {
+      if (typeof this.onUpdateCallback === 'function') {
+        this.onUpdateCallback(this);
+      }
+    };
+
+    /**
+     * Function: registerDrawCellCallback() - sets callback function to draw cell
+     * @param func
+     */
+    Cell.prototype.registerUpdateCallback = function (func) {
+      this.onUpdateCallback = func;
+    };
+
+    /**
+     * Resets cell state
+     */
+    Cell.prototype.reset = function () {
+      this.value = null;
+      this.history = [];
+      this.update();
+    };
 
     /**
      * Sets value to a number between 1 and 9 inclusively
@@ -256,19 +303,11 @@
       if (typeof value === 'number' && value >= 1 && value <= 9) {
         this.value = Math.floor(value);
         this.history.push(this.value);
+        this.update();
       } else {
         throw new Error("value must be a number between 1 and 9");
       }
     };
-
-    /**
-     * Resets cell state
-     */
-    Cell.prototype.reset = function () {
-      this.value = null;
-      this.history = [];
-    };
-
 
     return Cell;
   })();
